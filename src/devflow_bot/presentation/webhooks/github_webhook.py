@@ -3,7 +3,7 @@
 import hashlib
 import hmac
 
-from fastapi import APIRouter, Header, HTTPException, Request, status
+from fastapi import APIRouter, Header, Request, status
 
 from devflow_bot.config.logging import get_logger
 from devflow_bot.config.settings import get_settings
@@ -18,9 +18,7 @@ def verify_signature(payload: bytes, signature: str, secret: str) -> bool:
     """Verify GitHub webhook signature."""
     if not signature or not secret:
         return False
-    expected = "sha256=" + hmac.new(
-        secret.encode(), payload, hashlib.sha256
-    ).hexdigest()
+    expected = "sha256=" + hmac.new(secret.encode(), payload, hashlib.sha256).hexdigest()
     return hmac.compare_digest(expected, signature)
 
 
@@ -34,9 +32,10 @@ async def github_webhook(
     settings = get_settings()
     body = await request.body()
 
-    if settings.github_webhook_secret:
-        if not verify_signature(body, x_hub_signature_256, settings.github_webhook_secret):
-            raise InvalidWebhookSignatureError("Invalid webhook signature")
+    if settings.github_webhook_secret and not verify_signature(
+        body, x_hub_signature_256, settings.github_webhook_secret
+    ):
+        raise InvalidWebhookSignatureError("Invalid webhook signature")
 
     payload = await request.json()
     payload["_event_name"] = x_github_event

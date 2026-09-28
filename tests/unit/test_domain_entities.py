@@ -2,8 +2,6 @@
 
 from datetime import datetime
 
-import pytest
-
 from devflow_bot.domain.entities.github_event import GitHubEvent
 from devflow_bot.domain.entities.notification import Notification
 from devflow_bot.domain.entities.project import Project

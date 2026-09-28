@@ -5,7 +5,6 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from devflow_bot.application.use_cases.handle_github_event import HandleGitHubEventUseCase
-from devflow_bot.domain.entities.github_event import GitHubEvent
 from devflow_bot.domain.entities.project import Project
 from devflow_bot.domain.value_objects.event_type import EventType
 

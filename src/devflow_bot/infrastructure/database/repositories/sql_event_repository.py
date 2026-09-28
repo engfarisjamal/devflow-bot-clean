@@ -45,15 +45,11 @@ class SQLEventRepository(EventRepository):
         return self._to_entity(model)
 
     async def get_by_id(self, event_id: str) -> GitHubEvent | None:
-        result = await self.session.execute(
-            select(EventModel).where(EventModel.id == event_id)
-        )
+        result = await self.session.execute(select(EventModel).where(EventModel.id == event_id))
         model = result.scalar_one_or_none()
         return self._to_entity(model) if model else None
 
-    async def list_by_repository(
-        self, repository: str, limit: int = 50
-    ) -> list[GitHubEvent]:
+    async def list_by_repository(self, repository: str, limit: int = 50) -> list[GitHubEvent]:
         result = await self.session.execute(
             select(EventModel)
             .where(EventModel.repository == repository)
@@ -63,15 +59,11 @@ class SQLEventRepository(EventRepository):
         return [self._to_entity(m) for m in result.scalars().all()]
 
     async def list_unprocessed(self) -> list[GitHubEvent]:
-        result = await self.session.execute(
-            select(EventModel).where(EventModel.processed == False)  # noqa: E712
-        )
+        result = await self.session.execute(select(EventModel).where(EventModel.processed == False))
         return [self._to_entity(m) for m in result.scalars().all()]
 
     async def update(self, event: GitHubEvent) -> GitHubEvent:
-        result = await self.session.execute(
-            select(EventModel).where(EventModel.id == event.id)
-        )
+        result = await self.session.execute(select(EventModel).where(EventModel.id == event.id))
         model = result.scalar_one_or_none()
         if not model:
             raise ValueError(f"Event {event.id} not found")

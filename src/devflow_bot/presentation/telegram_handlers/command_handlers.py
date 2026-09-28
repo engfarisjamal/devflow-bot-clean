@@ -1,9 +1,12 @@
 """Telegram command handlers."""
 
+from datetime import UTC, datetime
+
 from telegram import Update
 from telegram.ext import ContextTypes
 
 from devflow_bot.config.logging import get_logger
+from devflow_bot.domain.entities.project import Project
 from devflow_bot.infrastructure.database.base import async_session_maker
 from devflow_bot.infrastructure.database.repositories.sql_project_repository import (
     SQLProjectRepository,
@@ -58,21 +61,20 @@ async def projects_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         async with async_session_maker() as session:
             repo = SQLProjectRepository(session)
             projects = await repo.list_active()
-
-        if not projects:
-            await update.message.reply_text(
-                "📭 لا توجد مشاريع\n\nأضف مشروع بـ /add_project"
-            )
-            return
-
-        text = f"📋 المشاريع النشطة ({len(projects)})\n\n"
-        for p in projects:
-            text += f"🔹 {p.name}\n   {p.repository}\n   📊 {p.event_count} حدث\n\n"
-
-        await update.message.reply_text(text)
-    except Exception as e:
+    except (OSError, RuntimeError, ValueError) as e:
         logger.error("projects_command_failed", error=str(e))
-        await update.message.reply_text(f"❌ خطأ: {str(e)}")
+        await update.message.reply_text(f"❌ خطأ: {e!s}")
+        return
+
+    if not projects:
+        await update.message.reply_text("📭 لا توجد مشاريع\n\nأضف مشروع بـ /add_project")
+        return
+
+    text = f"📋 المشاريع النشطة ({len(projects)})\n\n"
+    for p in projects:
+        text += f"🔹 {p.name}\n   {p.repository}\n   📊 {p.event_count} حدث\n\n"
+
+    await update.message.reply_text(text)
 
 
 async def stats_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -81,18 +83,19 @@ async def stats_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         async with async_session_maker() as session:
             repo = SQLProjectRepository(session)
             projects = await repo.list_active()
-
-        total_events = sum(p.event_count for p in projects)
-        text = (
-            "📊 الإحصائيات\n\n"
-            f"🔹 المشاريع: {len(projects)}\n"
-            f"🔹 الأحداث الكلية: {total_events}\n"
-            f"🔹 الحالة: 🟢 نشط\n"
-        )
-        await update.message.reply_text(text)
-    except Exception as e:
+    except (OSError, RuntimeError, ValueError) as e:
         logger.error("stats_command_failed", error=str(e))
-        await update.message.reply_text(f"❌ خطأ: {str(e)}")
+        await update.message.reply_text(f"❌ خطأ: {e!s}")
+        return
+
+    total_events = sum(p.event_count for p in projects)
+    text = (
+        "📊 الإحصائيات\n\n"
+        f"🔹 المشاريع: {len(projects)}\n"
+        f"🔹 الأحداث الكلية: {total_events}\n"
+        f"🔹 الحالة: 🟢 نشط\n"
+    )
+    await update.message.reply_text(text)
 
 
 async def add_project_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -110,9 +113,6 @@ async def add_project_command(update: Update, context: ContextTypes.DEFAULT_TYPE
     chat_id = str(update.effective_chat.id)
 
     try:
-        from datetime import datetime
-        from devflow_bot.domain.entities.project import Project
-
         async with async_session_maker() as session:
             repo = SQLProjectRepository(session)
             existing = await repo.get_by_repository(repository)
@@ -122,19 +122,18 @@ async def add_project_command(update: Update, context: ContextTypes.DEFAULT_TYPE
                 return
 
             project = Project(
-                id=f"{int(datetime.now(timezone.utc).timestamp())}",
+                id=f"{int(datetime.now(UTC).timestamp())}",
                 name=name,
                 repository=repository,
                 owner=repository.split("/")[0],
                 chat_id=chat_id,
             )
             await repo.add(project)
-
-        await update.message.reply_text(
-            f"✅ تم إضافة المشروع\n\n"
-            f"📁 الاسم: {name}\n"
-            f"📦 المستودع: {repository}"
-        )
-    except Exception as e:
+    except (OSError, RuntimeError, ValueError) as e:
         logger.error("add_project_failed", error=str(e))
-        await update.message.reply_text(f"❌ خطأ: {str(e)}")
+        await update.message.reply_text(f"❌ خطأ: {e!s}")
+        return
+
+    await update.message.reply_text(
+        f"✅ تم إضافة المشروع\n\n📁 الاسم: {name}\n📦 المستودع: {repository}"
+    )

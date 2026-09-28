@@ -1,10 +1,9 @@
 """FastAPI application entry point."""
 
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 from fastapi import FastAPI, Request
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from devflow_bot.config.logging import get_logger, setup_logging
 from devflow_bot.config.settings import get_settings

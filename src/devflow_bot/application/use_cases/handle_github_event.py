@@ -1,6 +1,6 @@
 """Use case: Handle GitHub webhook event."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from devflow_bot.application.dto.notification_dto import NotificationDTO
 from devflow_bot.domain.entities.github_event import GitHubEvent
@@ -30,7 +30,7 @@ class HandleGitHubEventUseCase:
         event_type = self._detect_event_type(event_data)
 
         event = GitHubEvent(
-            id=event_data.get("id", str(datetime.now(timezone.utc).timestamp())),
+            id=event_data.get("id", str(datetime.now(UTC).timestamp())),
             event_type=event_type,
             repository=event_data.get("repository", {}).get("full_name", "unknown"),
             sender=event_data.get("sender", {}).get("login", "unknown"),

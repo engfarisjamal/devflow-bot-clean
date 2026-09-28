@@ -1,7 +1,7 @@
 """Project entity."""
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime
 
 
 @dataclass

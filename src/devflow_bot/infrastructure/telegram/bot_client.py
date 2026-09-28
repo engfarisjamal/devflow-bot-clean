@@ -36,7 +36,9 @@ class TelegramBotClient:
             logger.error("telegram_send_failed", chat_id=chat_id, error=str(e))
             return False
 
-    async def send_notification(self, chat_id: str, title: str, message: str, emoji: str = "ℹ️") -> bool:
+    async def send_notification(
+        self, chat_id: str, title: str, message: str, emoji: str = "ℹ️"
+    ) -> bool:
         """Send formatted notification."""
         text = f"{emoji} *{title}*\n\n{message}"
         return await self.send_message(chat_id, text)

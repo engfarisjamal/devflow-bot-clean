@@ -55,7 +55,7 @@ class SQLNotificationRepository(NotificationRepository):
 
     async def list_pending(self) -> list[Notification]:
         result = await self.session.execute(
-            select(NotificationModel).where(NotificationModel.sent == False)  # noqa: E712
+            select(NotificationModel).where(NotificationModel.sent == False)
         )
         return [self._to_entity(m) for m in result.scalars().all()]
 

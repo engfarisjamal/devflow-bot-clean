@@ -56,12 +56,8 @@ async def test_list_unprocessed(db_session: AsyncSession) -> None:
     """Test listing unprocessed events."""
     repo = SQLEventRepository(db_session)
 
-    e1 = GitHubEvent(
-        id="e1", event_type=EventType.PUSH, repository="u/r", sender="t", payload={}
-    )
-    e2 = GitHubEvent(
-        id="e2", event_type=EventType.PUSH, repository="u/r", sender="t", payload={}
-    )
+    e1 = GitHubEvent(id="e1", event_type=EventType.PUSH, repository="u/r", sender="t", payload={})
+    e2 = GitHubEvent(id="e2", event_type=EventType.PUSH, repository="u/r", sender="t", payload={})
     e2.mark_processed()
 
     await repo.add(e1)

@@ -9,8 +9,6 @@ from devflow_bot.config.settings import get_settings
 class Base(DeclarativeBase):
     """Base class for all models."""
 
-    pass
-
 
 settings = get_settings()
 

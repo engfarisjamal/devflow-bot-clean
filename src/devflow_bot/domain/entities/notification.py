@@ -1,7 +1,7 @@
 """Notification entity."""
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from devflow_bot.domain.value_objects.severity import Severity
 
@@ -22,4 +22,4 @@ class Notification:
     def mark_sent(self) -> None:
         """Mark notification as sent."""
         self.sent = True
-        self.sent_at = datetime.now(timezone.utc)
+        self.sent_at = datetime.now(UTC)

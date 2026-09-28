@@ -1,6 +1,9 @@
 """Use case: Send pending notifications."""
 
+from devflow_bot.config.logging import get_logger
 from devflow_bot.domain.repositories.notification_repository import NotificationRepository
+
+logger = get_logger(__name__)
 
 
 class SendNotificationUseCase:
@@ -27,7 +30,8 @@ class SendNotificationUseCase:
                 notification.mark_sent()
                 await self.notification_repo.update(notification)
                 sent_count += 1
-            except Exception:
+            except (ValueError, RuntimeError) as e:
+                logger.error("notification_send_failed", error=str(e))
                 continue
 
         return sent_count

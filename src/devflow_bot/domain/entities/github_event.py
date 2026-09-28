@@ -1,7 +1,7 @@
 """GitHub event entity."""
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any
 
 from devflow_bot.domain.value_objects.event_type import EventType

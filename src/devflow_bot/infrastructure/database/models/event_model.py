@@ -1,8 +1,8 @@
 """SQLAlchemy model for GitHubEvent."""
 
-from datetime import datetime, timezone
+from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, JSON, String
+from sqlalchemy import JSON, Boolean, DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from devflow_bot.infrastructure.database.base import Base

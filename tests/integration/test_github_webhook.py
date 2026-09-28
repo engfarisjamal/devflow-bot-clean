@@ -1,9 +1,5 @@
 """Integration tests for GitHub webhook endpoint."""
 
-import hashlib
-import hmac
-import json
-
 import pytest
 from httpx import ASGITransport, AsyncClient
 

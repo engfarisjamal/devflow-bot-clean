@@ -60,9 +60,7 @@ class SQLProjectRepository(ProjectRepository):
         return self._to_entity(model) if model else None
 
     async def list_active(self) -> list[Project]:
-        result = await self.session.execute(
-            select(ProjectModel).where(ProjectModel.active == True)  # noqa: E712
-        )
+        result = await self.session.execute(select(ProjectModel).where(ProjectModel.active == True))
         return [self._to_entity(m) for m in result.scalars().all()]
 
     async def update(self, project: Project) -> Project:
