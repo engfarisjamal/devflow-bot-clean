@@ -1,0 +1,65 @@
+[tool.poetry]
+name = "devflow-bot"
+version = "0.1.0"
+description = "Autonomous Developer Workflow Bot"
+authors = ["Your Name <your@email.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "devflow_bot", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "*"
+uvicorn = { extras = ["standard"], version = "*" }
+pydantic = "*"
+pydantic-settings = "*"
+sqlalchemy = {extras = ["asyncio"], version = "^2.1.1"}
+alembic = "*"
+asyncpg = "*"
+python-telegram-bot = "*"
+httpx = "*"
+redis = "*"
+celery = "*"
+sentry-sdk = "*"
+structlog = "*"
+greenlet = "^3.5.6"
+aiosqlite = "^0.22.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+pytest-asyncio = "*"
+pytest-cov = "*"
+ruff = "*"
+black = "*"
+mypy = "*"
+pre-commit = "*"
+faker = "*"
+factory-boy = "*"
+mkdocs = "*"
+mkdocs-material = "*"
+httpx = "^0.28.1"
+poethepoet = "^0.48.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["src"]
