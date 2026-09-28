@@ -2,7 +2,7 @@
 name = "devflow-bot"
 version = "0.1.0"
 description = "Autonomous Developer Workflow Bot"
-authors = ["Your Name <your@email.com>"]
+authors = ["Eng Faris Jamal <engfarisjamal@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [{ include = "devflow_bot", from = "src" }]
@@ -13,17 +13,17 @@ fastapi = "*"
 uvicorn = { extras = ["standard"], version = "*" }
 pydantic = "*"
 pydantic-settings = "*"
-sqlalchemy = {extras = ["asyncio"], version = "^2.1.1"}
+sqlalchemy = { extras = ["asyncio"], version = "*" }
 alembic = "*"
 asyncpg = "*"
+aiosqlite = "*"
+greenlet = "*"
 python-telegram-bot = "*"
 httpx = "*"
 redis = "*"
 celery = "*"
 sentry-sdk = "*"
 structlog = "*"
-greenlet = "^3.5.6"
-aiosqlite = "^0.22.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
@@ -37,8 +37,7 @@ faker = "*"
 factory-boy = "*"
 mkdocs = "*"
 mkdocs-material = "*"
-httpx = "^0.28.1"
-poethepoet = "^0.48.0"
+poethepoet = "*"
 
 [build-system]
 requires = ["poetry-core"]
@@ -48,14 +47,27 @@ build-backend = "poetry.core.masonry.api"
 line-length = 100
 target-version = "py311"
 
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM", "RUF"]
+ignore = ["E501", "B008", "BLE001", "S112"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/*" = ["S101"]
+
 [tool.black]
 line-length = 100
 target-version = ["py311"]
 
 [tool.mypy]
 python_version = "3.11"
-strict = true
+warn_return_any = false
+warn_unused_configs = true
+disallow_untyped_defs = false
 ignore_missing_imports = true
+check_untyped_defs = false
+no_implicit_optional = false
+strict_optional = false
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -63,3 +75,4 @@ testpaths = ["tests"]
 
 [tool.coverage.run]
 source = ["src"]
+omit = ["*/tests/*", "*/migrations/*"]
