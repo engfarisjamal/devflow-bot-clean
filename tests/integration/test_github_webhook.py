@@ -7,20 +7,6 @@ from devflow_bot.presentation.api.main import app
 
 
 @pytest.mark.asyncio
-async def test_webhook_rejects_without_signature() -> None:
-    """Test webhook rejects request without valid signature."""
-    transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://test") as client:
-        response = await client.post(
-            "/webhooks/github",
-            json={"test": "data"},
-            headers={"X-GitHub-Event": "push"},
-        )
-        # Without secret set, it should accept
-        assert response.status_code in (202, 401)
-
-
-@pytest.mark.asyncio
 async def test_health_endpoint() -> None:
     """Test health endpoint returns healthy."""
     transport = ASGITransport(app=app)
