@@ -1,9 +1,9 @@
 """Notification severity value object."""
 
-from enum import Enum
+from enum import StrEnum
 
 
-class Severity(str, Enum):
+class Severity(StrEnum):
     """Notification severity levels."""
 
     INFO = "info"

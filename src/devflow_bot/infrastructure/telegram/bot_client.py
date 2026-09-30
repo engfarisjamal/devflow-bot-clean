@@ -37,7 +37,7 @@ class TelegramBotClient:
             return False
 
     async def send_notification(
-        self, chat_id: str, title: str, message: str, emoji: str = "ℹ️"
+        self, chat_id: str, title: str, message: str, emoji: str = "ℹ"
     ) -> bool:
         """Send formatted notification."""
         text = f"{emoji} *{title}*\n\n{message}"

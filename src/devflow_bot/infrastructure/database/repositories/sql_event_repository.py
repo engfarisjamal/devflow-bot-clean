@@ -59,7 +59,9 @@ class SQLEventRepository(EventRepository):
         return [self._to_entity(m) for m in result.scalars().all()]
 
     async def list_unprocessed(self) -> list[GitHubEvent]:
-        result = await self.session.execute(select(EventModel).where(EventModel.processed == False))
+        result = await self.session.execute(
+            select(EventModel).where(EventModel.processed.is_(False))
+        )
         return [self._to_entity(m) for m in result.scalars().all()]
 
     async def update(self, event: GitHubEvent) -> GitHubEvent:

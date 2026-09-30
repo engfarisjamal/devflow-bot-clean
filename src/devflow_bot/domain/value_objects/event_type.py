@@ -1,9 +1,9 @@
 """GitHub event types value object."""
 
-from enum import Enum
+from enum import StrEnum
 
 
-class EventType(str, Enum):
+class EventType(StrEnum):
     """GitHub webhook event types."""
 
     PUSH = "push"

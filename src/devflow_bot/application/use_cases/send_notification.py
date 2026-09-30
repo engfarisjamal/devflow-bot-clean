@@ -39,9 +39,9 @@ class SendNotificationUseCase:
     def _get_emoji(self, severity: str) -> str:
         """Get emoji for severity."""
         return {
-            "info": "ℹ️",
+            "info": "ℹ",
             "success": "✅",
             "warning": "⚠️",
             "error": "❌",
             "critical": "🚨",
-        }.get(severity, "ℹ️")
+        }.get(severity, "ℹ")
